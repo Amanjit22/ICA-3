@@ -1,1 +1,42 @@
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+    env: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: mysql
+        env: dev
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: "Aman@2266"  
+            - name: MYSQL_DATABASE
+              value: "wordpress_db"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-service
+spec:
+  ports:
+    - port: 3306
+  selector:
+    app: mysql
+    env: dev
+  type: ClusterIP 
